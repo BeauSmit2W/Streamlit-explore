@@ -15,4 +15,5 @@ pytz==2022.7.1
 requests==2.28.2
 typing_extensions==4.5.0
 urllib3==1.26.14
-snowflake-connector-python==3.0.1
+snowflake-connector-python==3.0.1 
+-r https://raw.githubusercontent.com/snowflakedb/snowflake-connector-python/v3.0.1/tested_requirements/requirements_39.reqs
