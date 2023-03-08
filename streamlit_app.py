@@ -25,3 +25,4 @@ rows = run_query("SELECT * from FOOD_INSPECTIONS limit 25;")
 for row in rows:
     st.write(f"{row[0]} has a :{row[1]}:")
 
+st.write('hello world')
