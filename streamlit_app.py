@@ -25,6 +25,7 @@ def run_query(query):
 df = run_query("SELECT * from FOOD_INSPECTIONS;")
 
 df.LONGITUDE = df.LONGITUDE.astype(float)
+df.LATITUDE = df.LATITUDE.astype(float)
 
 # Print results.
 st.dataframe(df)
