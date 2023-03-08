@@ -1,5 +1,6 @@
 import streamlit as st
 import snowflake.connector
+import pandas as pd
 
 # Initialize connection.
 # Uses st.cache_resource to only run once.
@@ -17,12 +18,11 @@ conn = init_connection()
 def run_query(query):
     with conn.cursor() as cur:
         cur.execute(query)
-        return cur.fetchall()
+        dat = cur.fetchall()
+        df = pd.DataFrame(dat, columns=[col[0] for col in cur.description])
+        return df
 
-rows = run_query("SELECT * from FOOD_INSPECTIONS limit 25;")
+df = run_query("SELECT * from FOOD_INSPECTIONS limit 25;")
 
 # Print results.
-for row in rows:
-    st.write(f"{row[0]} has a :{row[1]}:")
-
-st.write('hello world')
+st.dataframe(df)
