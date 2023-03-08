@@ -41,7 +41,7 @@ folium.Marker(
 ).add_to(m)
 
 for idx, row in df.iterrows():
-    if row.LATITUDE.notnull() & row.LONGITUDE.notnull():
+    if pd.notnull(row.LATITUDE) & pd.notnull(row.LONGITUDE):
         folium.Marker(
             [row.LATITUDE, row.LONGITUDE], popup=row.DBA_Name, tooltip=row.AKA_Name
         ).add_to(m)
