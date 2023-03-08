@@ -24,7 +24,7 @@ def run_query(query):
         df = pd.DataFrame(dat, columns=[col[0] for col in cur.description])
         return df
 
-df = run_query("SELECT * from FOOD_INSPECTIONS where RESULTS='Fail';")
+df = run_query("SELECT * from FOOD_INSPECTIONS where RESULTS='Fail' limit 50;")
 
 st.write(f"dataframe shape: {df.shape}")
 
