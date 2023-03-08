@@ -31,7 +31,6 @@ df.LATITUDE = df.LATITUDE.astype(float)
 
 # Print results.
 st.dataframe(df)
-[st.write(t) for t in df.dtypes]
 
 # map of Chicago
 m = folium.Map(location=[41.88148170412358, -87.63162352073498], zoom_start=16)
