@@ -24,7 +24,7 @@ def run_query(query):
         df = pd.DataFrame(dat, columns=[col[0] for col in cur.description])
         return df
 
-df = run_query("SELECT * from FOOD_INSPECTIONS;")
+df = run_query("SELECT * from FOOD_INSPECTIONS where RESULTS='Fail';")
 
 df.LONGITUDE = df.LONGITUDE.astype(float)
 df.LATITUDE = df.LATITUDE.astype(float)
@@ -33,9 +33,16 @@ df.LATITUDE = df.LATITUDE.astype(float)
 st.dataframe(df)
 
 # map of Chicago
-m = folium.Map(location=[41.88148170412358, -87.63162352073498], zoom_start=16)
+m = folium.Map(location=[41.88148170412358, -87.63162352073498], zoom_start=15)
+
+# add markers to map
 folium.Marker(
     [41.87768968860344, -87.63705780095162], popup="2nd Watch Office", tooltip="2nd Watch Office"
+).add_to(m)
+
+for idx, row in df.iterrows():
+    folium.Marker(
+    [row.LATITUDE, df.LONGITUDE], popup=row.DBA_Name, tooltip=row.AKA_Name
 ).add_to(m)
 
 # call to render Folium map in Streamlit
