@@ -41,9 +41,10 @@ folium.Marker(
 ).add_to(m)
 
 for idx, row in df.iterrows():
-    folium.Marker(
-        [row.LATITUDE, row.LONGITUDE], popup=row.DBA_Name, tooltip=row.AKA_Name
-).add_to(m)
+    if row.LATITUDE.notnull() & row.LONGITUDE.notnull():
+        folium.Marker(
+            [row.LATITUDE, row.LONGITUDE], popup=row.DBA_Name, tooltip=row.AKA_Name
+        ).add_to(m)
 
 # call to render Folium map in Streamlit
 st_data = st_folium(m, width=725)
