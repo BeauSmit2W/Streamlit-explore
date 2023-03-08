@@ -26,4 +26,4 @@ df = run_query("SELECT min(LONGITUDE), max(LONGITUDE) from FOOD_INSPECTIONS;")
 
 # Print results.
 st.dataframe(df)
-st.write("data type: {df.dtypes}")
+st.write(f"data type: {df.dtypes}")
