@@ -1,6 +1,7 @@
 import streamlit as st
 import snowflake.connector
 import pandas as pd
+import folium
 
 # Initialize connection.
 # Uses st.cache_resource to only run once.
