@@ -19,7 +19,7 @@ def run_query(query):
         cur.execute(query)
         return cur.fetchall()
 
-rows = run_query("SELECT * from FOOD_INSPECTIONS;")
+rows = run_query("SELECT * from FOOD_INSPECTIONS limit 25;")
 
 # Print results.
 for row in rows:
