@@ -29,7 +29,7 @@ def run_query(query):
 
 df = run_query("SELECT * from FOOD_INSPECTIONS_TEMP")
 
-st.write(f"dataframe shape: {df.shape}")
+st.write(f"dataframe shape: {df.head()}")
 
 if 'init' not in st.session_state: st.session_state['init']=False
 if 'store' not in st.session_state: st.session_state['store']={}
@@ -51,7 +51,7 @@ def saveDefault():
     cur = conn.cursor()
     sql = "truncate table FOOD_INSPECTIONS_TEMP"
     cur.execute(sql)
-
+    # TODO: merge into would be more efficient
     success, nchunks, nrows, _ = write_pandas(
         conn = conn, 
         df = pd.DataFrame(st.session_state.store_d), 
