@@ -36,12 +36,12 @@ if 'store_d' not in st.session_state: st.session_state['store_d']={}
 if 'edit' not in st.session_state: st.session_state['edit']=True
 
 if st.session_state.init == False:
-    st.session_state.store_d = df
+    st.session_state.store_d = {'A':[1,2,3,4], 'B':[7,6,5,4]}
     st.session_state.init = True
 
 @st.cache(allow_output_mutation=True)
 def fetch_data():
-    return st.session_state.store_d
+    return pd.DataFrame(st.session_state.store_d)
 
 def saveDefault():
     st.session_state.store_d = st.session_state.store
@@ -57,7 +57,7 @@ def app():
     df = fetch_data()
     ag = AgGrid(df, editable=st.session_state.edit, height=200)
     df2=ag['data']
-    st.session_state.store=df2
+    st.session_state.store=df2.to_dict()
     st.dataframe(df2)
 
 if __name__ == '__main__':
