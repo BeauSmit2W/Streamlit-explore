@@ -29,7 +29,7 @@ def run_query(query):
 
 df = run_query("SELECT * from FOOD_INSPECTIONS_TEMP")
 
-st.write(f"dataframe shape: {df.head()}")
+st.dataframe(df)
 
 if 'init' not in st.session_state: st.session_state['init']=False
 if 'store' not in st.session_state: st.session_state['store']={}
