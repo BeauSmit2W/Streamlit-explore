@@ -61,8 +61,9 @@ def saveDefault():
 
 def app():
     c1,c2=st.columns(2)
-    lock=c1.button('Save', key='lock', on_click=saveDefault)
-    unlock=c2.button('Edit', key='unlock', on_click=saveDefault)
+    lock=c1.button('Save', key='lock', help='Overwrites values in Snowflake', on_click=saveDefault)
+    # unlock=c2.button('Edit', key='unlock', on_click=saveDefault)
+    unlock=c2.button('Edit', key='unlock')
     if lock: st.session_state.edit = False
     if unlock: st.session_state.edit = True
 
