@@ -29,9 +29,6 @@ def run_query(query):
 
 df = run_query("SELECT * from FOOD_INSPECTIONS_TEMP")
 
-st.dataframe(df)
-st.write(df.shape)
-
 if 'init' not in st.session_state: st.session_state['init']=False
 if 'store' not in st.session_state: st.session_state['store']={}
 if 'store_d' not in st.session_state: st.session_state['store_d']={}
@@ -61,6 +58,9 @@ def saveDefault():
     return
 
 def app():
+
+    st.header('Data Security Policy Editor')
+
     c1,c2=st.columns(2)
     lock=c1.button(
         label = 'Save', 
@@ -78,32 +78,15 @@ def app():
     ag = AgGrid(df, editable=st.session_state.edit, height=200)
     df2=ag['data']
     st.session_state.store=df2.to_dict()
-    # st.dataframe(df2)
+
+    options = st.multiselect(
+    'Which business units are allowed access?',
+    ['unit 1', 'unit 2', 'unit 3', 'unit 4'],
+    ['unit 1'])
+
+    st.write('You selected:', options)
+
+    st.write(options)
 
 if __name__ == '__main__':
     app()
-
-
-
-# df.LONGITUDE = df.LONGITUDE.astype(float)
-# df.LATITUDE = df.LATITUDE.astype(float)
-
-# # Print results.
-# st.dataframe(df)
-
-# # map of Chicago
-# m = folium.Map(location=[41.88148170412358, -87.63162352073498], zoom_start=15)
-
-# # add markers to map
-# folium.Marker(
-#     [41.87768968860344, -87.63705780095162], popup="2nd Watch Office", tooltip="2nd Watch Office"
-# ).add_to(m)
-
-# for idx, row in df.iterrows():
-#     if pd.notnull(row.LATITUDE) & pd.notnull(row.LONGITUDE):
-#         folium.Marker(
-#             [row.LATITUDE, row.LONGITUDE], popup=row.DBA_Name, tooltip=row.AKA_Name
-#         ).add_to(m)
-
-# # call to render Folium map in Streamlit
-# st_data = st_folium(m, width=725)
