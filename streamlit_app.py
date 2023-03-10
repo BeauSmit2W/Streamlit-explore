@@ -58,7 +58,7 @@ def app():
     ag = AgGrid(df, editable=st.session_state.edit, height=200)
     df2=ag['data']
     st.session_state.store=df2.to_dict()
-    st.dataframe(df2)
+    # st.dataframe(df2)
 
 if __name__ == '__main__':
     app()
