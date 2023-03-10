@@ -46,6 +46,12 @@ def fetch_data():
 
 def saveDefault():
     st.session_state.store_d = st.session_state.store
+
+    # trunc and load table
+    cur = conn.cursor()
+    sql = "truncate table FOOD_INSPECTIONS_TEMP"
+    cur.execute(sql)
+
     success, nchunks, nrows, _ = write_pandas(
         conn = conn, 
         df = pd.DataFrame(st.session_state.store_d), 
