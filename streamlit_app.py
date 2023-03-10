@@ -36,7 +36,7 @@ if 'store_d' not in st.session_state: st.session_state['store_d']={}
 if 'edit' not in st.session_state: st.session_state['edit']=True
 
 if st.session_state.init == False:
-    st.session_state.store_d = {'A':[1,2,3,4], 'B':[7,6,5,4]}
+    st.session_state.store_d = df.to_dict()
     st.session_state.init = True
 
 @st.cache(allow_output_mutation=True)
