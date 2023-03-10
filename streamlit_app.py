@@ -86,7 +86,6 @@ def app():
 
     st.write('You selected:', options)
 
-    st.write(options)
 
 if __name__ == '__main__':
     app()
