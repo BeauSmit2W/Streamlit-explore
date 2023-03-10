@@ -1,5 +1,6 @@
 import streamlit as st
 import snowflake.connector
+from snowflake.connector.pandas_tools import write_pandas
 import pandas as pd
 import numpy as np
 import folium
@@ -26,7 +27,7 @@ def run_query(query):
         df = pd.DataFrame(dat, columns=[col[0] for col in cur.description])
         return df
 
-df = run_query("SELECT * from FOOD_INSPECTIONS where RESULTS='Fail' limit 50;")
+df = run_query("SELECT * from FOOD_INSPECTIONS_TEMP")
 
 st.write(f"dataframe shape: {df.shape}")
 
@@ -45,6 +46,11 @@ def fetch_data():
 
 def saveDefault():
     st.session_state.store_d = st.session_state.store
+    success, nchunks, nrows, _ = write_pandas(
+        conn = conn, 
+        df = pd.DataFrame(st.session_state.store_d), 
+        table_name = 'FOOD_INSPECTIONS_TEMP'
+        )
     return
 
 def app():
