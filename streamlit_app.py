@@ -3,6 +3,7 @@ import snowflake.connector
 import pandas as pd
 import numpy as np
 import folium
+from st_aggrid import AgGrid
 from streamlit_folium import st_folium
 
 # Initialize connection.
@@ -29,23 +30,38 @@ df = run_query("SELECT * from FOOD_INSPECTIONS where RESULTS='Fail' limit 50;")
 
 st.write(f"dataframe shape: {df.shape}")
 
-# Randomly fill a dataframe and cache it
+if 'init' not in st.session_state: st.session_state['init']=False
+if 'store' not in st.session_state: st.session_state['store']={}
+if 'store_d' not in st.session_state: st.session_state['store_d']={}
+if 'edit' not in st.session_state: st.session_state['edit']=True
+
+if st.session_state.init == False:
+    st.session_state.store_d = {'A':[1,2,3,4], 'B':[7,6,5,4]}
+    st.session_state.init = True
+
 @st.cache(allow_output_mutation=True)
-def get_dataframe():
-    return df
+def fetch_data():
+    return pd.DataFrame(st.session_state.store_d)
 
-df_display = get_dataframe()
+def saveDefault():
+    st.session_state.store_d = st.session_state.store
+    return
 
-# Create row, column, and value inputs
-row = st.number_input('row', max_value=df_display.shape[0])
-col = st.number_input('column', max_value=df_display.shape[1])
-value = st.number_input('value')
+def app():
+    c1,c2=st.columns(2)
+    lock=c1.button('Lock', key='lock', on_click=saveDefault)
+    unlock=c2.button('Unlock', key='unlock', on_click=saveDefault)
+    if lock: st.session_state.edit = False
+    if unlock: st.session_state.edit = True
 
-# Change the entry at (row, col) to the given value
-df.values[row][col] = value
+    df = fetch_data()
+    ag = AgGrid(df, editable=st.session_state.edit, height=200)
+    df2=ag['data']
+    st.session_state.store=df2.to_dict()
+    st.dataframe(df2)
 
-# And display the result!
-st.dataframe(df)
+if __name__ == '__main__':
+    app()
 
 
 
