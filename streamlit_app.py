@@ -83,7 +83,7 @@ def app():
     df2 = ag['data']
     st.session_state.store = df2.to_dict()
 
-    next_button = c2.button('Next', key='next', on_click=saveDefault)
+    next_button = st.button('Next', key='next', on_click=saveDefault)
     if next_button:
         question = next_question()
 
