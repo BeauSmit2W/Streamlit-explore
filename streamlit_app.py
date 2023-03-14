@@ -65,7 +65,7 @@ def next_question():
 
 def insert_into_df(idx, options):
     if idx is not None:
-        df = fetch_data()
+        df = run_query("SELECT * from FOOD_INSPECTIONS_TEMP")
         df.loc[idx, "allow_access"] = str(options)
         st.write(df.loc[idx, "allow_access"])
         st.session_state.store=df.to_dict()
