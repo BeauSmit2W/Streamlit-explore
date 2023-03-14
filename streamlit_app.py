@@ -62,8 +62,11 @@ def next_question():
     for idx, row in not_reviewed.iterrows():
         return idx, row.DBA_Name
 
-def insert_into_df(options):
+def insert_into_df(idx, options):
+    print()
+    print(idx)
     print(options)
+    print()
     return
 
 def app():
@@ -90,7 +93,7 @@ def app():
 
     next_button = st.button('Next', key='next', on_click=saveDefault)
     if next_button:
-        question = next_question()
+        idx, question = next_question()
         st.write(question)
 
     options = st.multiselect(
@@ -99,7 +102,7 @@ def app():
     ['unit 1'])
 
     st.write('You selected:', options)
-    enter = st.button('Enter', key='enter', on_click=insert_into_df, kwargs={'options': options})
+    enter = st.button('Enter', key='enter', on_click=insert_into_df, kwargs={'idx': idx, 'options': options})
         
 
 if __name__ == '__main__':
