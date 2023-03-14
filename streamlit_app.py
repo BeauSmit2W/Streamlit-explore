@@ -63,10 +63,10 @@ def next_question():
         return idx, row.DBA_Name
 
 def insert_into_df(idx, options):
-    print()
-    print(idx)
-    print(options)
-    print()
+    st.write()
+    st.write(idx)
+    st.write(options)
+    st.write()
     return
 
 def app():
