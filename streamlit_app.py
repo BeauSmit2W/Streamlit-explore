@@ -67,6 +67,7 @@ def insert_into_df(idx, options):
         df = fetch_data()
         df.loc[idx, "allow_access"] = str(options)
         st.session_state.store=df.to_dict()
+        saveDefault()
     return
 
 def app():
