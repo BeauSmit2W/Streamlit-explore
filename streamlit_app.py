@@ -64,10 +64,8 @@ def next_question():
 
 def insert_into_df(idx, options):
     if idx is not None:
-        st.write(idx)
-        st.write(options)
         df = fetch_data()
-        df.loc[idx, "allow_access"] = str(options)
+        df.loc[idx, "allow_access"] = 'options'
         st.session_state.store=df.to_dict()
         saveDefault()
     return
