@@ -92,6 +92,7 @@ def app():
     st.session_state.store=df2.to_dict()
 
     next_button = st.button('Next', key='next', on_click=saveDefault)
+    idx = None
     if next_button:
         idx, question = next_question()
         st.write(question)
