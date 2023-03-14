@@ -58,7 +58,7 @@ def saveDefault():
     return
 
 def next_question():
-    df = fetch_data()
+    df = run_query("SELECT * from FOOD_INSPECTIONS_TEMP")
     not_reviewed = df.loc[df.allow_access == '']
     for idx, row in not_reviewed.iterrows():
         return idx, row.DBA_Name
@@ -94,7 +94,7 @@ def app():
     df2 = ag['data']
     st.session_state.store=df2.to_dict()
 
-    next_button = st.button('Next', key='next', on_click=saveDefault)
+    next_button = st.button('Next', key='next')
     idx = None
     if next_button:
         idx, question = next_question()
