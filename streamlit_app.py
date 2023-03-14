@@ -63,7 +63,8 @@ def next_question():
         return idx, row.DBA_Name
 
 def insert_into_df(idx, options):
-    df.loc[idx, "allow_access"] = str(options)
+    if options:
+        df.loc[idx, "allow_access"] = str(options)
     return
 
 def app():
