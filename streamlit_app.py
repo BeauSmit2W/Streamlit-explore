@@ -57,6 +57,11 @@ def saveDefault():
         )
     return
 
+def next_question():
+    not_reviewed = df.loc[df.allow_access.isnull()]
+    row = not_reviewed.iloc[0]
+    return row['DBA_Name']
+
 def app():
 
     st.header('Data Security Policy Editor')
@@ -78,6 +83,10 @@ def app():
     ag = AgGrid(df, editable=st.session_state.edit, height=200)
     df2=ag['data']
     st.session_state.store=df2.to_dict()
+
+    next_button = st.button('Next', key='next', on_click=saveDefault)
+    if next_button:
+        question = next_question()
 
     options = st.multiselect(
     'Which business units are allowed access?',
