@@ -58,9 +58,13 @@ def saveDefault():
     return
 
 def next_question():
-    not_reviewed = df.loc[df['allow_access']=='']
-    row = not_reviewed.iloc[0]
-    return row['DBA_Name']
+    not_reviewed = df.loc[df.allow_access == '']
+    for idx, row in not_reviewed.iterrows():
+        return idx, row.DBA_Name
+
+def insert_into_df(options):
+    print(options)
+    return
 
 def app():
 
@@ -95,6 +99,8 @@ def app():
     ['unit 1'])
 
     st.write('You selected:', options)
+    enter = st.button('Enter', key='enter', on_click=insert_into_df, kwargs={'options': options})
+        
 
 if __name__ == '__main__':
     app()
