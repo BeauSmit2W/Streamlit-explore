@@ -66,8 +66,8 @@ def app():
 
     st.header('Data Security Policy Editor')
 
-    c1,c2=st.columns(2)
-    lock=c1.button(
+    c1,c2 = st.columns(2)
+    lock = c1.button(
         label = 'Save', 
         key = 'lock', 
         help = 'Overwrites values in Snowflake', 
@@ -75,19 +75,21 @@ def app():
         type = "primary"
         )
     # unlock=c2.button('Edit', key='unlock', on_click=saveDefault)
-    unlock=c2.button('Edit', key='unlock', help='Allow modification of Snowflake table')
+    unlock = c2.button('Edit', key='unlock', help='Allow modification of Snowflake table')
     if lock: st.session_state.edit = False
     if unlock: st.session_state.edit = True
 
     df = fetch_data()
     ag = AgGrid(df, editable=st.session_state.edit, height=200)
-    df2=ag['data']
+    df2 = ag['data']
     st.session_state.store=df2.to_dict()
 
     next_button = st.button('Next', key='next', on_click=saveDefault)
     if next_button:
         question = next_question()
 
+    st.write(question)
+    
     options = st.multiselect(
     'Which business units are allowed access?',
     ['unit 1', 'unit 2', 'unit 3', 'unit 4'],
