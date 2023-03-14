@@ -66,6 +66,7 @@ def insert_into_df(idx, options):
     if idx is not None:
         df = fetch_data()
         df.loc[idx, "allow_access"] = 'options'
+        st.write(df.loc[idx, "allow_access"])
         st.session_state.store=df.to_dict()
         saveDefault()
     return
