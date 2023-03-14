@@ -58,7 +58,7 @@ def saveDefault():
     return
 
 def next_question():
-    not_reviewed = df.loc[df.allow_access.isnull()]
+    not_reviewed = df.loc[df['allow_access']='']
     row = not_reviewed.iloc[0]
     return row['DBA_Name']
 
