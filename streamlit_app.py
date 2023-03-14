@@ -57,37 +57,27 @@ def saveDefault():
         )
     return
 
-def next_question():
-    not_reviewed = df.loc[df.allow_access.isnull()]
-    row = not_reviewed.iloc[0]
-    return row['DBA_Name']
-
 def app():
 
     st.header('Data Security Policy Editor')
 
-    c1,c2 = st.columns(2)
-    save = c1.button(
+    c1,c2=st.columns(2)
+    lock=c1.button(
         label = 'Save', 
         key = 'lock', 
         help = 'Overwrites values in Snowflake', 
         on_click = saveDefault,
         type = "primary"
         )
-    edit = c2.button('Edit', key='edit', help='Allow modification of Snowflake table')
-    if save: st.session_state.edit = False
-    if edit: st.session_state.edit = True
+    # unlock=c2.button('Edit', key='unlock', on_click=saveDefault)
+    unlock=c2.button('Edit', key='unlock', help='Allow modification of Snowflake table')
+    if lock: st.session_state.edit = False
+    if unlock: st.session_state.edit = True
 
     df = fetch_data()
-    ag = AgGrid(df, editable = st.session_state.edit, height=200)
-    df2 = ag['data']
-    st.session_state.store = df2.to_dict()
-
-    next_button = st.button('Next', key='next', on_click=saveDefault)
-    if next_button:
-        question = next_question()
-
-    st.write(question)
+    ag = AgGrid(df, editable=st.session_state.edit, height=200)
+    df2=ag['data']
+    st.session_state.store=df2.to_dict()
 
     options = st.multiselect(
     'Which business units are allowed access?',
