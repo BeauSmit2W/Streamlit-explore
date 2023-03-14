@@ -58,6 +58,7 @@ def saveDefault():
     return
 
 def next_question():
+    df = fetch_data()
     not_reviewed = df.loc[df.allow_access == '']
     for idx, row in not_reviewed.iterrows():
         return idx, row.DBA_Name
