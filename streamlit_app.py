@@ -87,9 +87,8 @@ def app():
     next_button = st.button('Next', key='next', on_click=saveDefault)
     if next_button:
         question = next_question()
+        st.write(question)
 
-    st.write(question)
-    
     options = st.multiselect(
     'Which business units are allowed access?',
     ['unit 1', 'unit 2', 'unit 3', 'unit 4'],
