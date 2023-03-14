@@ -38,7 +38,7 @@ if st.session_state.init == False:
     st.session_state.store_d = df.to_dict()
     st.session_state.init = True
 
-@st.cache(allow_output_mutation=True)
+@st.cache_data(ttl=600)
 def fetch_data():
     return pd.DataFrame(st.session_state.store_d)
 
