@@ -17,7 +17,9 @@ def init_connection():
 
 conn = init_connection()
 
-# Perform query.
+# default table when app loads
+table_name = "MYTABLE"
+
 # Uses st.cache_data to only rerun when the query changes or after 10 min.
 # @st.cache_data(ttl=600)
 def run_query(query):
@@ -27,9 +29,10 @@ def run_query(query):
         df = pd.DataFrame(dat, columns=[col[0] for col in cur.description])
         return df
 
-table_name = "FOOD_INSPECTIONS"
+df_table_names = run_query(f"select table_name from STREAMLIT_POC.INFORMATION_SCHEMA.TABLES where table_schema = 'BSMIT'")
+st.write(df_table_names)
 
-df = run_query(f"SELECT * from {table_name}")
+df_table = run_query(f"SELECT * from {table_name}")
 
 if 'init' not in st.session_state: st.session_state['init']=False
 if 'store' not in st.session_state: st.session_state['store']={}
@@ -37,7 +40,7 @@ if 'store_d' not in st.session_state: st.session_state['store_d']={}
 if 'edit' not in st.session_state: st.session_state['edit']=True
 
 if st.session_state.init == False:
-    st.session_state.store_d = df.to_dict()
+    st.session_state.store_d = df_table.to_dict()
     st.session_state.init = True
 
 # @st.cache_data(ttl=600)
@@ -54,7 +57,7 @@ def saveDefault():
     # TODO: merge into would be more efficient
     success, nchunks, nrows, _ = write_pandas(
         conn = conn, 
-        df = pd.DataFrame(st.session_state.store_d), 
+        df_table = pd.DataFrame(st.session_state.store_d), 
         table_name = table_name
         )
     return
@@ -69,11 +72,11 @@ def app():
     if lock: st.session_state.edit = False
     if unlock: st.session_state.edit = True
 
-    df = fetch_data()
-    ag = AgGrid(df, editable=st.session_state.edit, height=200)
-    df2=ag['data']
-    st.session_state.store=df2.to_dict()
-    st.dataframe(df2)
+    df_table = fetch_data()
+    ag = AgGrid(df_table, editable=st.session_state.edit, height=200)
+    df_table2=ag['data']
+    st.session_state.store=df_table2.to_dict()
+    st.dataframe(df_table2)
 
 if __name__ == '__main__':
     app()
