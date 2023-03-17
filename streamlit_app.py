@@ -36,7 +36,6 @@ table_name = st.selectbox(
         "Choose a table to edit",
         (table_names)
     )
-st.write(table_name)
 df_table = run_query(f"SELECT * from {table_name}")
 
 if 'init' not in st.session_state: st.session_state['init']=False
@@ -62,7 +61,7 @@ def saveDefault():
     # TODO: merge into would be more efficient
     success, nchunks, nrows, _ = write_pandas(
         conn = conn, 
-        df_table = pd.DataFrame(st.session_state.store_d), 
+        df = pd.DataFrame(st.session_state.store_d), 
         table_name = table_name
         )
     return
@@ -81,6 +80,8 @@ def app():
     ag = AgGrid(df_table, editable=st.session_state.edit, height=200)
     df_table2=ag['data']
     st.session_state.store=df_table2.to_dict()
+
+    st.header('Current Table in DW')
     st.dataframe(df_table2)
 
 if __name__ == '__main__':
