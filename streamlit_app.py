@@ -38,14 +38,14 @@ table_name = st.selectbox(
     )
 df_table = run_query(f"SELECT * from {table_name}")
 
-if 'init' not in st.session_state: st.session_state['init']=False
+# if 'init' not in st.session_state: st.session_state['init']=False
 if 'store' not in st.session_state: st.session_state['store']={}
 if 'store_d' not in st.session_state: st.session_state['store_d']={}
 if 'edit' not in st.session_state: st.session_state['edit']=True
 
-if st.session_state.init == False:
-    st.session_state.store_d = df_table.to_dict()
-    st.session_state.init = True
+# if st.session_state.init == False:
+st.session_state.store_d = df_table.to_dict()
+# st.session_state.init = True
 
 # @st.cache_data(ttl=600)
 def fetch_data():
