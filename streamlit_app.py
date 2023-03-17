@@ -38,7 +38,6 @@ table_name = st.selectbox(
         "Choose a table to edit",
         (table_names)
     )
-st.session_state.table = table_name
 df_table = run_query(f"SELECT * from {table_name}")
 st.session_state.store_d = df_table.to_dict()
 
@@ -47,6 +46,8 @@ def fetch_data():
     return pd.DataFrame(st.session_state.store_d)
 
 def saveDefault():
+    st.session_state.table = table_name
+
     st.session_state.store_d = st.session_state.store
 
     # trunc and load table
