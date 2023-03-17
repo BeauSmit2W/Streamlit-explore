@@ -27,7 +27,9 @@ def run_query(query):
         df = pd.DataFrame(dat, columns=[col[0] for col in cur.description])
         return df
 
-df = run_query("SELECT * from FOOD_INSPECTIONS")
+table_name = "FOOD_INSPECTIONS"
+
+df = run_query(f"SELECT * from {table_name}")
 
 if 'init' not in st.session_state: st.session_state['init']=False
 if 'store' not in st.session_state: st.session_state['store']={}
@@ -47,13 +49,13 @@ def saveDefault():
 
     # trunc and load table
     cur = conn.cursor()
-    sql = "truncate table FOOD_INSPECTIONS_TEMP"
+    sql = f"truncate table {table_name}"
     cur.execute(sql)
     # TODO: merge into would be more efficient
     success, nchunks, nrows, _ = write_pandas(
         conn = conn, 
         df = pd.DataFrame(st.session_state.store_d), 
-        table_name = 'FOOD_INSPECTIONS_TEMP'
+        table_name = table_name
         )
     return
 
