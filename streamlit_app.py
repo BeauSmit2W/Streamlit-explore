@@ -17,8 +17,10 @@ def init_connection():
 
 conn = init_connection()
 
-# default table when app loads
-table_name = "MYTABLE"
+if 'table' not in st.session_state: st.session_state['table']=''
+if 'store' not in st.session_state: st.session_state['store']={}
+if 'store_d' not in st.session_state: st.session_state['store_d']={}
+if 'edit' not in st.session_state: st.session_state['edit']=True
 
 # Uses st.cache_data to only rerun when the query changes or after 10 min.
 # @st.cache_data(ttl=600)
@@ -37,15 +39,10 @@ table_name = st.selectbox(
         (table_names)
     )
 df_table = run_query(f"SELECT * from {table_name}")
-
-# if 'init' not in st.session_state: st.session_state['init']=False
-if 'store' not in st.session_state: st.session_state['store']={}
-if 'store_d' not in st.session_state: st.session_state['store_d']={}
-if 'edit' not in st.session_state: st.session_state['edit']=True
-
-# if st.session_state.init == False:
 st.session_state.store_d = df_table.to_dict()
-# st.session_state.init = True
+
+if st.session_state.table == '':
+    st.session_state.table = table_name
 
 # @st.cache_data(ttl=600)
 def fetch_data():
