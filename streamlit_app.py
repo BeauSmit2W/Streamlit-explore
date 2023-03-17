@@ -38,11 +38,9 @@ table_name = st.selectbox(
         "Choose a table to edit",
         (table_names)
     )
+st.session_state.table = table_name
 df_table = run_query(f"SELECT * from {table_name}")
 st.session_state.store_d = df_table.to_dict()
-
-if st.session_state.table == '':
-    st.session_state.table = table_name
 
 # @st.cache_data(ttl=600)
 def fetch_data():
