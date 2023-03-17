@@ -31,6 +31,10 @@ def run_query(query):
 
 df_table_names = run_query(f"select table_name from STREAMLIT_POC.INFORMATION_SCHEMA.TABLES where table_schema = 'BSMIT'")
 st.write(df_table_names)
+option = st.selectbox(
+        "How would you like to be contacted?",
+        ("Email", "Home phone", "Mobile phone")
+    )
 
 df_table = run_query(f"SELECT * from {table_name}")
 
