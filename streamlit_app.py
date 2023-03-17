@@ -30,14 +30,13 @@ def run_query(query):
         return df
 
 df_table_names = run_query(f"select table_name from STREAMLIT_POC.INFORMATION_SCHEMA.TABLES where table_schema = 'BSMIT'")
-table_names = []
-st.write([tbl for tbl in df_table_names['TABLE_NAME']])
+table_names = [tbl for tbl in df_table_names['TABLE_NAME']]
 
-option = st.selectbox(
-        "How would you like to be contacted?",
+table_name = st.selectbox(
+        "Choose a table to edit",
         (table_names)
     )
-
+st.write(table_name)
 df_table = run_query(f"SELECT * from {table_name}")
 
 if 'init' not in st.session_state: st.session_state['init']=False
