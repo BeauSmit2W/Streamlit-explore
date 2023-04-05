@@ -5,6 +5,8 @@ import pandas as pd
 import numpy as np
 from st_aggrid import AgGrid
 
+TABLE_NAME = "FOOD_INSPECTIONS_SMALL"
+
 # Initialize connection.
 # Uses st.cache_resource to only run once.
 @st.cache_resource
@@ -15,7 +17,6 @@ def init_connection():
 
 conn = init_connection()
 
-if 'table' not in st.session_state: st.session_state['table']=''
 if 'store' not in st.session_state: st.session_state['store']={}
 if 'store_d' not in st.session_state: st.session_state['store_d']={}
 if 'edit' not in st.session_state: st.session_state['edit']=True
@@ -29,14 +30,7 @@ def run_query(query):
         df = pd.DataFrame(dat, columns=[col[0] for col in cur.description])
         return df
 
-df_table_names = run_query(f"select table_name from STREAMLIT_POC.INFORMATION_SCHEMA.TABLES where table_schema = 'BSMIT'")
-table_names = [tbl for tbl in df_table_names['TABLE_NAME']]
-
-table_name = st.selectbox(
-        "Choose a table to edit",
-        (table_names)
-    )
-df_table = run_query(f"SELECT * from {table_name}")
+df_table = run_query(f"SELECT * from {TABLE_NAME}")
 st.session_state.store_d = df_table.to_dict()
 
 # @st.cache_data(ttl=600)
@@ -44,19 +38,17 @@ def fetch_data():
     return pd.DataFrame(st.session_state.store_d)
 
 def saveDefault():
-    st.session_state.table = table_name
-
     st.session_state.store_d = st.session_state.store
 
     # trunc and load table
     cur = conn.cursor()
-    sql = f"truncate table {table_name}"
+    sql = f"truncate table {TABLE_NAME}"
     cur.execute(sql)
     # TODO: merge into would be more efficient. But we need to know all the column names for that
     success, nchunks, nrows, _ = write_pandas(
         conn = conn, 
         df = pd.DataFrame(st.session_state.store_d), 
-        table_name = table_name
+        table_name = TABLE_NAME
         )
     return
 
