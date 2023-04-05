@@ -3,9 +3,7 @@ import snowflake.connector
 from snowflake.connector.pandas_tools import write_pandas
 import pandas as pd
 import numpy as np
-import folium
 from st_aggrid import AgGrid
-from streamlit_folium import st_folium
 
 # Initialize connection.
 # Uses st.cache_resource to only run once.
@@ -54,7 +52,7 @@ def saveDefault():
     cur = conn.cursor()
     sql = f"truncate table {table_name}"
     cur.execute(sql)
-    # TODO: merge into would be more efficient
+    # TODO: merge into would be more efficient. But we need to know all the column names for that
     success, nchunks, nrows, _ = write_pandas(
         conn = conn, 
         df = pd.DataFrame(st.session_state.store_d), 
