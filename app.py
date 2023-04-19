@@ -5,6 +5,8 @@ import pandas as pd
 import numpy as np
 from st_aggrid import AgGrid
 
+st. set_page_config(layout="wide")
+
 TABLE_NAME = "FOOD_INSPECTIONS_SMALL"
 
 # Initialize connection.
@@ -19,7 +21,6 @@ conn = init_connection()
 
 if 'store' not in st.session_state: st.session_state['store']={}
 if 'store_d' not in st.session_state: st.session_state['store_d']={}
-if 'edit' not in st.session_state: st.session_state['edit']=True
 
 # Uses st.cache_data to only rerun when the query changes or after 10 min.
 # @st.cache_data(ttl=600)
@@ -35,10 +36,13 @@ st.session_state.store_d = df_table.to_dict()
 
 # @st.cache_data(ttl=600)
 def fetch_data():
-    return pd.DataFrame(st.session_state.store_d)
+    df = pd.DataFrame(st.session_state.store_d)
+    df_sub = df.loc[df.DELETE != 1]
+    return df_sub
 
 def saveDefault():
     st.session_state.store_d = st.session_state.store
+    print(st.session_state.store_d)
 
     # trunc and load table
     cur = conn.cursor()
@@ -52,23 +56,28 @@ def saveDefault():
         )
     return
 
-def app():
+def add_row():
+    df = pd.DataFrame(st.session_state.store)
+    new_row = pd.DataFrame([[None for _ in df.columns]], columns=df.columns)
+    df = pd.concat([df, new_row], axis=0)
+    st.session_state.store = df.to_dict()
+    print(st.session_state.store)
+    saveDefault()
+    return
 
+def app():
     st.header('Table Editor')
 
-    c1,c2=st.columns(2)
-    lock=c1.button('Lock', key='lock', on_click=saveDefault)
-    unlock=c2.button('Unlock', key='unlock')
-    if lock: st.session_state.edit = False
-    if unlock: st.session_state.edit = True
+    save = st.button('Save', key='save', on_click=saveDefault)
 
     df_table = fetch_data()
-    ag = AgGrid(df_table, editable=st.session_state.edit, height=200)
-    df_table2=ag['data']
-    st.session_state.store=df_table2.to_dict()
+    ag = AgGrid(df_table, editable=True, height=400, fit_columns_on_grid_load=True)
+    df_table2 = ag['data']
+    st.session_state.store = df_table2.to_dict()
 
-    st.header('Current Table in DW')
-    st.dataframe(df_table2)
+    c1,c2 = st.columns(2)
+    addrow = c1.button('Add row to bottom', key='addrow', on_click=add_row)
+    nothing = c2.button('nothing', key='nothing')
 
 if __name__ == '__main__':
     app()
