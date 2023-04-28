@@ -59,7 +59,7 @@ def saveDefault():
 def add_row():
     df = pd.DataFrame(st.session_state.store)
     new_row = pd.DataFrame([[None for _ in df.columns]], columns=df.columns)
-    df = pd.concat([df, new_row], axis=0)
+    df = pd.concat([df, new_row], axis=0, ignore_index=True)
     st.session_state.store = df.to_dict()
     print(st.session_state.store)
     saveDefault()
@@ -68,7 +68,7 @@ def add_row():
 def app():
     st.header('Table Editor')
 
-    save = st.button('Save', key='save', on_click=saveDefault)
+    save = st.button('Save', key='save', on_click=saveDefault, type='primary')
 
     df_table = fetch_data()
     ag = AgGrid(df_table, editable=True, height=400, fit_columns_on_grid_load=True)
@@ -77,7 +77,7 @@ def app():
 
     c1,c2 = st.columns(2)
     addrow = c1.button('Add row to bottom', key='addrow', on_click=add_row)
-    nothing = c2.button('nothing', key='nothing')
+    deleterow = c2.button('Delete rows', key='deleterow', on_click=saveDefault)
 
 if __name__ == '__main__':
     app()
