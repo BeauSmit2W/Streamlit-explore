@@ -38,12 +38,18 @@ st.session_state.store_d = df_table.to_dict()
 def fetch_data():
     df = pd.DataFrame(st.session_state.store_d)
     df_sub = df.loc[df.DELETE != 1]
+    st.session_state.store_del = df.loc[df.DELETE == 1]
     return df_sub
 
 def saveDefault():
     st.session_state.store_d = st.session_state.store
-    print(st.session_state.store_d)
 
+    df = pd.concat([
+        pd.DataFrame(st.session_state.store_d),
+        st.session_state.store_del
+    ], axis=0).sort_index()
+    print(df)
+    
     # trunc and load table
     cur = conn.cursor()
     sql = f"truncate table {TABLE_NAME}"
@@ -51,7 +57,8 @@ def saveDefault():
     # TODO: merge into would be more efficient. But we need to know all the column names for that
     success, nchunks, nrows, _ = write_pandas(
         conn = conn, 
-        df = pd.DataFrame(st.session_state.store_d), 
+        # df = pd.DataFrame(st.session_state.store_d), 
+        df = df, 
         table_name = TABLE_NAME
         )
     return
@@ -60,8 +67,8 @@ def add_row():
     df = pd.DataFrame(st.session_state.store)
     new_row = pd.DataFrame([[None for _ in df.columns]], columns=df.columns)
     df = pd.concat([df, new_row], axis=0, ignore_index=True)
+    df.loc[df.DELETE.isnull(), 'DELETE'] = 0
     st.session_state.store = df.to_dict()
-    print(st.session_state.store)
     saveDefault()
     return
 
